@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::dropIfExists('proveedor');
         Schema::create('proveedor', function (Blueprint $table) {
             $table->engine="InnoDB";
             $table->id();;
