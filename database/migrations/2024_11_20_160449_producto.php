@@ -9,7 +9,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::dropIfExists('producto');
         Schema::create('producto', function (Blueprint $table) {
             $table->engine = "InnoDB";
             $table->id();
