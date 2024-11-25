@@ -20,7 +20,6 @@ return new class extends Migration
                 ->onDelete('cascade');
         });
         DB::statement("INSERT INTO producto (nombre,descripcion,stock,proveedor_id) VALUES ('Sony WH-1000XM4', 'Audífonos inalámbricos con cancelación de ruido y calidad de sonido excepcional','20','2')");
-        DB::statement("INSERT INTO producto (nombre,descripcion,stock,proveedor_id) VALUES ('Sony WH-1000XM4', 'Audífonos inalámbricos con cancelación de ruido y calidad de sonido excepcional','20','2')");
         DB::statement("INSERT INTO producto (nombre,descripcion,stock,proveedor_id) VALUES ('Bose QuietComfort 35 II', 'Audífonos Bluetooth con cancelación activa de ruido y micrófono integrado','20','3')");
         DB::statement("INSERT INTO producto (nombre,descripcion,stock,proveedor_id) VALUES ('Apple AirPods Pro', 'Audífonos inalámbricos con ajuste personalizado y cancelación activa de ruido','20','6')");
         DB::statement("INSERT INTO producto (nombre,descripcion,stock,proveedor_id) VALUES ('JBL Flip 5', 'Parlante portátil resistente al agua con sonido potente y batería de larga duración','20','1')");
