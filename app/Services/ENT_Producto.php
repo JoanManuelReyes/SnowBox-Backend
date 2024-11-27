@@ -17,7 +17,7 @@ class ENT_Producto {
         ->join('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
         ->join('registro as r', 'p.id', '=', 'r.producto_id')
         ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', 'r.cantidad')
-        ->where('p.stock', '$operador', 5)
+        ->where('p.stock', $operador, 5)
         ->where('r.tipo', 'Entrada')
         ->orderBy('p.id')
         ->get();
@@ -27,7 +27,7 @@ class ENT_Producto {
             ->join('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
             ->join('registro as r', 'p.id', '=', 'r.producto_id')
             ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', 'r.cantidad')
-            ->where('p.stock', '$operador', 5)
+            ->where('p.stock', $operador, 5)
             ->where('r.tipo', 'Salida')
             ->orderBy('p.id')
             ->get();
@@ -40,7 +40,7 @@ class ENT_Producto {
                     ->where('s.tipo', '=', 'Devolución');
             })
             ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', DB::raw('COALESCE(s.cantidad, 0) as cantidad'))
-            ->where('p.stock', '$operador', 5)
+            ->where('p.stock', $operador, 5)
             ->orderBy('p.id')
             ->get();
 
