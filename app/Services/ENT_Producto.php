@@ -7,12 +7,84 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Producto;
 use App\Models\Registro;
 use App\Models\ProductoBuilder;
+use Illuminate\Support\Facades\DB;
 
 class ENT_Producto {
     public function ListarProductosInv($parametro) {
         $operador = $parametro === 'Restock' ? '<' : '>=';
 
-        $resultados = Producto::select(
+        $entradas = DB::table('producto as p')
+        ->join('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
+        ->join('registro as r', 'p.id', '=', 'r.producto_id')
+        ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', 'r.cantidad')
+        ->where('p.stock', '>=', 5)
+        ->where('r.tipo', 'Entrada')
+        ->orderBy('p.id')
+        ->get();
+
+        // Consulta de salidas
+        $salidas = DB::table('producto as p')
+            ->join('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
+            ->join('registro as r', 'p.id', '=', 'r.producto_id')
+            ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', 'r.cantidad')
+            ->where('p.stock', '>=', 5)
+            ->where('r.tipo', 'Salida')
+            ->orderBy('p.id')
+            ->get();
+
+        // Consulta de devoluciones
+        $devoluciones = DB::table('producto as p')
+            ->leftJoin('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
+            ->leftJoin('solicitud as s', function ($join) {
+                $join->on('p.id', '=', 's.producto_id')
+                    ->where('s.tipo', '=', 'Devolución');
+            })
+            ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', DB::raw('COALESCE(s.cantidad, 0) as cantidad'))
+            ->where('p.stock', '>=', 5)
+            ->orderBy('p.id')
+            ->get();
+
+        $productoClass = new Producto();
+
+        $entradasProcesadas = $productoClass->calcularEntradas($entradas);
+        $salidasProcesadas = $productoClass->calcularSalidas($salidas);
+        $devolucionesProcesadas = $productoClass->calcularDevoluciones($devoluciones);
+
+        // Combinar todos los resultados
+        $productos = [];
+        foreach ($entradasProcesadas as $entrada) {
+            $productos[$entrada->id] = $entrada;
+        }
+
+        foreach ($salidasProcesadas as $salida) {
+            if (isset($productos[$salida->id])) {
+                $productos[$salida->id]->salidas = $salida->salidas;
+            } else {
+                $productos[$salida->id] = $salida;
+            }
+        }
+
+        foreach ($devolucionesProcesadas as $devolucion) {
+            if (isset($productos[$devolucion->id])) {
+                $productos[$devolucion->id]->devoluciones = $devolucion->devoluciones;
+            } else {
+                $productos[$devolucion->id] = $devolucion;
+            }
+        }
+
+        // Completar con ceros los campos faltantes
+        foreach ($productos as &$producto) {
+            $producto->entradas = $producto->entradas ?? 0;
+            $producto->salidas = $producto->salidas ?? 0;
+            $producto->devoluciones = $producto->devoluciones ?? 0;
+        }
+
+        return array_values($productos); // Retornar un arreglo final
+
+
+
+
+        /*$resultados = Producto::select(
             'producto.id',
             'producto.nombre',
             'producto.descripcion',
@@ -42,7 +114,7 @@ class ENT_Producto {
                 ->build();
         });
 
-        return $productos;
+        return $productos;*/
     }
 
     public function RegistrarProducto(Request $request) {

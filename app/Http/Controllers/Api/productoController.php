@@ -34,8 +34,8 @@ class productoController extends Controller
         $resultado = $this->ent_producto->RegistrarProducto($request);
 
         return response()->json(
-            $resultado, // Datos del servicio
-            $resultado['status'] // Código de estado HTTP
+            $resultado, 
+            $resultado['status'] 
         );
     }
 
@@ -44,8 +44,8 @@ class productoController extends Controller
         $resultado = $this->ent_producto->ModificarProducto($request,$id);
 
         return response()->json(
-            $resultado, // Datos del servicio
-            $resultado['status'] // Código de estado HTTP
+            $resultado, 
+            $resultado['status'] 
         );
     }
 

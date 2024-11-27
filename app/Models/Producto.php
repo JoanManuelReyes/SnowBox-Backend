@@ -79,18 +79,44 @@ class Producto extends Model
     }
 
     // Métodos para calcular las entradas y salidas
-    public function calcularEntradas()
+    public function calcularEntradas($datos)
     {
-        return $this->registros()
-            ->where('tipo', 'Entrada')
-            ->sum('cantidad');
+        $agrupados = [];
+        foreach ($datos as $registro) {
+            if (!isset($agrupados[$registro->id])) {
+                $agrupados[$registro->id] = (object)[
+                    'id' => $registro->id,
+                    'nombre' => $registro->nombre,
+                    'descripcion' => $registro->descripcion,
+                    'stock' => $registro->stock,
+                    'proveedor_id' => $registro->proveedor_id,
+                    'proveedor_nombre' => $registro->proveedor_nombre,
+                    'entradas' => 0, // Inicializar el campo para sumar
+                ];
+            }
+            $agrupados[$registro->id]->entradas += $registro->cantidad;
+        }
+        return array_values($agrupados);
     }
 
-    public function calcularSalidas()
+    public function calcularSalidas($datos)
     {
-        return $this->registros()
-            ->where('tipo', 'Salida')
-            ->sum('cantidad');
+        $agrupados = [];
+        foreach ($datos as $registro) {
+            if (!isset($agrupados[$registro->id])) {
+                $agrupados[$registro->id] = (object)[
+                    'id' => $registro->id,
+                    'nombre' => $registro->nombre,
+                    'descripcion' => $registro->descripcion,
+                    'stock' => $registro->stock,
+                    'proveedor_id' => $registro->proveedor_id,
+                    'proveedor_nombre' => $registro->proveedor_nombre,
+                    'salidas' => 0, // Inicializar el campo para sumar
+                ];
+            }
+            $agrupados[$registro->id]->salidas += $registro->cantidad;
+        }
+        return array_values($agrupados);
     }
 
     // Relación con registros
@@ -99,11 +125,24 @@ class Producto extends Model
         return $this->hasMany(Solicitud::class, 'producto_id');
     }
 
-    public function calcularDevoluciones()
+    public function calcularDevoluciones($datos)
     {
-        return $this->solicitud()
-            ->where('tipo', 'Devolucion')
-            ->sum('cantidad');
+        $agrupados = [];
+        foreach ($datos as $registro) {
+            if (!isset($agrupados[$registro->id])) {
+                $agrupados[$registro->id] = (object)[
+                    'id' => $registro->id,
+                    'nombre' => $registro->nombre,
+                    'descripcion' => $registro->descripcion,
+                    'stock' => $registro->stock,
+                    'proveedor_id' => $registro->proveedor_id,
+                    'proveedor_nombre' => $registro->proveedor_nombre,
+                    'devoluciones' => 0, // Inicializar el campo para sumar
+                ];
+            }
+            $agrupados[$registro->id]->devoluciones += $registro->cantidad;
+        }
+        return array_values($agrupados);
     }
 
     // Método toString para mostrar el objeto Producto
