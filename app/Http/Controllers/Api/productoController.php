@@ -43,10 +43,10 @@ class productoController extends Controller
     {
         $resultado = $this->ent_producto->ModificarProducto($request,$id);
 
-        return response()->json(
+        return $resultado;/*response()->json(
             $resultado, 
             $resultado['status'] 
-        );
+        );*/
     }
 
 
