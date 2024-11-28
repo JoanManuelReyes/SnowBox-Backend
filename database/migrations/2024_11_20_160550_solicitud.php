@@ -13,7 +13,7 @@ return new class extends Migration
             $table->engine="InnoDB";
             $table->id();
             $table->foreignId('usuario_id')
-                ->constrained('usuario')
+                ->constrained('equipologistica')
                 ->onDelete('cascade');
             $table->foreignId('producto_id')
                 ->constrained('producto')

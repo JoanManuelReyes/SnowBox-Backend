@@ -6,115 +6,62 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Producto;
 use App\Models\Registro;
-use App\Models\ProductoBuilder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Builder;
+use App\Models\Proveedor;
+use App\Models\Solicitud;
 
 class ENT_Producto {
     public function ListarProductosInv($parametro) {
-        $operador = $parametro === 'Restock' ? '<' : '>=';
+        $producto = Producto::all()->toArray();
+        $registro = Registro::all()->toArray();
+        $solicitud = Solicitud::all()->toArray();
+        $proveedor = Proveedor::all()->toArray();
 
-        $entradas = DB::table('producto as p')
-        ->join('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
-        ->join('registro as r', 'p.id', '=', 'r.producto_id')
-        ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', 'r.cantidad')
-        ->where('p.stock', $operador, 5)
-        ->where('r.tipo', 'Entrada')
-        ->orderBy('p.id')
-        ->get();
-
-        // Consulta de salidas
-        $salidas = DB::table('producto as p')
-            ->join('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
-            ->join('registro as r', 'p.id', '=', 'r.producto_id')
-            ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', 'r.cantidad')
-            ->where('p.stock', $operador, 5)
-            ->where('r.tipo', 'Salida')
-            ->orderBy('p.id')
-            ->get();
-
-        // Consulta de devoluciones
-        $devoluciones = DB::table('producto as p')
-            ->leftJoin('proveedor as prov', 'prov.id', '=', 'p.proveedor_id')
-            ->leftJoin('solicitud as s', function ($join) {
-                $join->on('p.id', '=', 's.producto_id')
-                    ->where('s.tipo', '=', 'Devolución');
-            })
-            ->select('p.id', 'p.nombre', 'p.descripcion', 'p.stock', 'p.proveedor_id', 'prov.nombre as proveedor_nombre', DB::raw('COALESCE(s.cantidad, 0) as cantidad'))
-            ->where('p.stock', $operador, 5)
-            ->orderBy('p.id')
-            ->get();
-
-        $productoClass = new Producto();
-
-        $entradasProcesadas = $productoClass->calcularEntradas($entradas);
-        $salidasProcesadas = $productoClass->calcularSalidas($salidas);
-        $devolucionesProcesadas = $productoClass->calcularDevoluciones($devoluciones);
-
-        // Combinar todos los resultados
-        $productos = [];
-        foreach ($entradasProcesadas as $entrada) {
-            $productos[$entrada->id] = $entrada;
-        }
-
-        foreach ($salidasProcesadas as $salida) {
-            if (isset($productos[$salida->id])) {
-                $productos[$salida->id]->salidas = $salida->salidas;
-            } else {
-                $productos[$salida->id] = $salida;
+        $productosFiltrados = array_filter($producto, function ($productos) use ($parametro) {
+            if ($parametro === 'Restock') {
+                return $productos['stock'] < 5;
+            } elseif ($parametro === 'Normal') {
+                return $productos['stock'] >= 5;
             }
-        }
-
-        foreach ($devolucionesProcesadas as $devolucion) {
-            if (isset($productos[$devolucion->id])) {
-                $productos[$devolucion->id]->devoluciones = $devolucion->devoluciones;
-            } else {
-                $productos[$devolucion->id] = $devolucion;
-            }
-        }
-
-        // Completar con ceros los campos faltantes
-        foreach ($productos as &$producto) {
-            $producto->entradas = $producto->entradas ?? 0;
-            $producto->salidas = $producto->salidas ?? 0;
-            $producto->devoluciones = $producto->devoluciones ?? 0;
-        }
-
-        return array_values($productos); // Retornar un arreglo final
-
-
-
-
-        /*$resultados = Producto::select(
-            'producto.id',
-            'producto.nombre',
-            'producto.descripcion',
-            'producto.stock',
-            'producto.proveedor_id',
-            'proveedor.nombre as proveedor_nombre'
-        )
-        ->join('proveedor', 'producto.proveedor_id', '=', 'proveedor.id')
-        ->where('stock', $operador, 5) 
-        ->orderBy('producto.id')
-        ->get();
-
-        $productos = $resultados->map(function ($producto) {
-            $entradas = $producto->calcularEntradas();
-            $salidas = $producto->calcularSalidas();
-            $devoluciones = $producto->calcularDevoluciones();
-
-            $builder = new ProductoBuilder();
-            return $builder->setId($producto->id)
-                ->setNombre($producto->nombre)
-                ->setDescripcion($producto->descripcion)
-                ->setStock($producto->stock)
-                ->setEntradas($entradas)
-                ->setSalidas($salidas)
-                ->setDevoluciones($devoluciones)
-                ->setProveedorId($producto->proveedor_id)
-                ->build();
         });
 
-        return $productos;*/
+        $entrada = array_filter($registro, function ($entradas){
+            return $entradas['tipo'] == 'Entrada';
+        });
+
+        $salida = array_filter($registro, function ($salidas){
+            return $salidas['tipo'] == 'Salida';
+        });
+
+        $devolucion = array_filter($solicitud, function ($devoluciones){
+            return $devoluciones['tipo'] == 'Devolución';
+        });
+
+        $productoClass = new Producto();
+        
+        $entradasSumadas=$productoClass->calcularEntradas($entrada);
+        $salidasSumadas=$productoClass->calcularSalidas($salida);
+        $devolucionesSumadas=$productoClass->calcularDevoluciones($devolucion);
+
+        $entradasPorProducto = array_column($entradasSumadas, 'cantidad', 'producto_id');
+        $salidasPorProducto = array_column($salidasSumadas, 'cantidad', 'producto_id');
+        $devolucionesPorProducto = array_column($devolucionesSumadas, 'cantidad', 'producto_id');
+        $proveedorPorId = array_column($proveedor, 'nombre', 'id');
+
+        $resultado = array_map(function ($producto) use ($entradasPorProducto, $salidasPorProducto, $devolucionesPorProducto, $proveedorPorId) {
+            return [
+                'id' => $producto['id'],
+                'nombre' => $producto['nombre'],
+                'descripcion' => $producto['descripcion'],
+                'stock' => $producto['stock'],
+                'proveedor_id' => $producto['proveedor_id'],
+                'proveedor_nombre' => $proveedorPorId[$producto['proveedor_id']] ?? 'Desconocido',
+                'entradas' => $entradasPorProducto[$producto['id']] ?? 0,
+                'salidas' => $salidasPorProducto[$producto['id']] ?? 0,
+                'devoluciones' => $devolucionesPorProducto[$producto['id']] ?? 0,
+            ];
+        }, $productosFiltrados);
+        return array_values($resultado); 
     }
 
     public function RegistrarProducto(Request $request) {
@@ -202,8 +149,18 @@ class ENT_Producto {
         $producto->proveedor_id= $request->proveedor;
         $producto->save();
 
-        $entradasActuales = $producto->calcularEntradas();
-        $salidasActuales = $producto->calcularSalidas();
+        $registro = Registro::all()->toArray();
+        
+        $entrada = array_filter($registro, function ($entradas){
+            return $entradas['tipo'] == 'Entrada';
+        });
+
+        $salida = array_filter($registro, function ($salidas){
+            return $salidas['tipo'] == 'Salida';
+        });
+
+        $entradasActuales = $producto->calcularEntradas($entrada);
+        $salidasActuales = $producto->calcularSalidas($salida);
 
         if($request->entradas<$salidasActuales){
             return [

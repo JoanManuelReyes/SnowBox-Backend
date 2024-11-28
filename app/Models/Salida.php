@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-class Pedido extends Solicitud
+class Salida extends Registro
 {
     public function __construct() {
         parent::__construct();
-        $this->setTipo("Pedido");
+        $this->setTipo("Salida");
     }
 }

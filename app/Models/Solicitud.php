@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Solicitud extends Model
 {
+    protected $id;
+    protected EquipoLogistica $equipologistica;
+    protected Producto $producto;
+    protected $tipo;
+    protected $descripcion;
+    protected $cantidad;
+    protected $fecha;
+    protected $estado;
+
+
+    
     // Tabla asociada al modelo
     protected $table = 'solicitud';
 
@@ -20,35 +31,85 @@ class Solicitud extends Model
         'estado'
     ];
 
-    // Relación con el modelo Producto (muchos registros pertenecen a un producto)
-    public function producto()
+    public $timestamps = false;
+
+    public function getId()
     {
-        return $this->belongsTo(Producto::class, 'producto_id');
+        return $this->id;
     }
 
-    // Relación con el modelo Producto (muchos registros pertenecen a un producto)
-    public function usuario()
+    public function setId($id)
     {
-        return $this->belongsTo(Usuario::class, 'usuario_id');
+        $this->id = $id;
     }
 
-    public function newFromBuilder($attributes = [], $connection = null)
+    public function getEquipoLogistica()
     {
-        // Convertir a objeto si no lo es
-        if (is_array($attributes)) {
-            $attributes = (object) $attributes;
-        }
+        return $this->equipologistica;
+    }
 
-        $instance = parent::newFromBuilder($attributes, $connection);
+    public function setEquipoLogistica(EquipoLogistica $equipologistica)
+    {
+        $this->equipologistica = $equipologistica;
+    }
 
-        if (isset($attributes->tipo)) {
-            $class = 'App\\Models\\' . ucfirst($attributes->tipo);
-            if (class_exists($class)) {
-                $instance = (new $class)->newInstance([], true);
-                $instance->setRawAttributes((array) $attributes, true);
-            }
-        }
+    public function getProducto()
+    {
+        return $this->producto;
+    }
 
-        return $instance;
+    public function setProducto(Producto $producto)
+    {
+        $this->producto = $producto;
+    }
+
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+    
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+    }
+
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+    }
+
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+    }
+
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
     }
 }

@@ -11,10 +11,10 @@ class Producto extends Model
     protected $nombre;
     protected $descripcion;
     protected $stock;
-    protected $entradas = [];
-    protected $salidas = [];
-    protected $devoluciones = [];
-    protected $proveedor;
+    protected Proveedor $proveedor;
+    protected Entrada $entradas;
+    protected Salida $salidas;
+    protected Devolucion $devolucion;
 
     // Definir los campos que pueden ser asignados masivamente
     protected $table = 'producto';
@@ -28,8 +28,6 @@ class Producto extends Model
     ];
 
     public $timestamps = false;
-
-    // Constructor gestionado por Eloquent
 
      // Métodos Getters y Setters
     public function getId()
@@ -72,77 +70,108 @@ class Producto extends Model
         $this->stock = $stock;
     }
     
-    // Relación con registros
-    public function registros()
+    public function getProveedor()
     {
-        return $this->hasMany(Registro::class, 'producto_id');
+        return $this->proveedor;
     }
 
+    public function setProveedor(Proveedor $proveedor)
+    {
+        $this->proveedor = $proveedor;
+    }
+    
+    public function getEntradas()
+    {
+        return $this->entradas;
+    }
+
+    public function setEntradas(Entrada $entradas)
+    {
+        $this->entradas = $entradas;
+    }
+
+    public function getSalidas()
+    {
+        return $this->salidas;
+    }
+
+    public function setSalidas(Salida $salidas)
+    {
+        $this->salidas = $salidas;
+    }
+    
+    public function getDevoluciones()
+    {
+        return $this->devoluciones;
+    }
+
+    public function setDevoluciones(Devolucion $devoluciones)
+    {
+        $this->devoluciones = $devoluciones;
+    }
+    
     // Métodos para calcular las entradas y salidas
     public function calcularEntradas($datos)
     {
-        $agrupados = [];
-        foreach ($datos as $registro) {
-            if (!isset($agrupados[$registro->id])) {
-                $agrupados[$registro->id] = (object)[
-                    'id' => $registro->id,
-                    'nombre' => $registro->nombre,
-                    'descripcion' => $registro->descripcion,
-                    'stock' => $registro->stock,
-                    'proveedor_id' => $registro->proveedor_id,
-                    'proveedor_nombre' => $registro->proveedor_nombre,
-                    'entradas' => 0, // Inicializar el campo para sumar
+        $resultado = [];
+
+        foreach ($datos as $entrada) {
+            $productoId = $entrada['producto_id'];
+
+            if (!isset($resultado[$productoId])) {
+                $resultado[$productoId] = [
+                    'cantidad' => 0,
+                    'tipo' => $entrada['tipo'],
+                    'producto_id' => $productoId
                 ];
             }
-            $agrupados[$registro->id]->entradas += $registro->cantidad;
+
+            $resultado[$productoId]['cantidad'] += $entrada['cantidad'];
         }
-        return array_values($agrupados);
+
+        return array_values($resultado);
     }
 
     public function calcularSalidas($datos)
     {
-        $agrupados = [];
-        foreach ($datos as $registro) {
-            if (!isset($agrupados[$registro->id])) {
-                $agrupados[$registro->id] = (object)[
-                    'id' => $registro->id,
-                    'nombre' => $registro->nombre,
-                    'descripcion' => $registro->descripcion,
-                    'stock' => $registro->stock,
-                    'proveedor_id' => $registro->proveedor_id,
-                    'proveedor_nombre' => $registro->proveedor_nombre,
-                    'salidas' => 0, // Inicializar el campo para sumar
+        $resultado = [];
+
+        foreach ($datos as $salida) {
+            $productoId = $salida['producto_id'];
+
+            if (!isset($resultado[$productoId])) {
+                $resultado[$productoId] = [
+                    'cantidad' => 0,
+                    'tipo' => $salida['tipo'],
+                    'producto_id' => $productoId
                 ];
             }
-            $agrupados[$registro->id]->salidas += $registro->cantidad;
-        }
-        return array_values($agrupados);
-    }
 
-    // Relación con registros
-    public function solicitud()
-    {
-        return $this->hasMany(Solicitud::class, 'producto_id');
+            $resultado[$productoId]['cantidad'] += $salida['cantidad'];
+        }
+
+        return array_values($resultado);
     }
 
     public function calcularDevoluciones($datos)
     {
-        $agrupados = [];
-        foreach ($datos as $registro) {
-            if (!isset($agrupados[$registro->id])) {
-                $agrupados[$registro->id] = (object)[
-                    'id' => $registro->id,
-                    'nombre' => $registro->nombre,
-                    'descripcion' => $registro->descripcion,
-                    'stock' => $registro->stock,
-                    'proveedor_id' => $registro->proveedor_id,
-                    'proveedor_nombre' => $registro->proveedor_nombre,
-                    'devoluciones' => 0, // Inicializar el campo para sumar
+        $resultado = [];
+
+        foreach ($datos as $devolucion) {
+            $productoId = $devolucion['producto_id'];
+
+            if (!isset($resultado[$productoId])) {
+                $resultado[$productoId] = [
+                    'cantidad' => 0,
+                    'tipo' => $devolucion['tipo'],
+                    'producto_id' => $productoId
                 ];
             }
-            $agrupados[$registro->id]->devoluciones += $registro->cantidad;
+
+            $resultado[$productoId]['cantidad'] += $devolucion['cantidad'];
         }
-        return array_values($agrupados);
+
+        return array_values($resultado);
     }
 
     // Método toString para mostrar el objeto Producto
@@ -154,7 +183,7 @@ class Producto extends Model
     // Builder estático para construir el objeto
     public static function builder()
     {
-        return new ProductoBuilder();
+        return new Builder();
     }
 
 }
