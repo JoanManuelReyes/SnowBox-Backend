@@ -128,6 +128,5 @@ class BSS_ModificacionDatosProductos {
             'status' => 200,
             'message' => 'Producto modificado correctamente',
         ];
-
     }
 }
