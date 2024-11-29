@@ -13,7 +13,7 @@ class EquipoLogistica extends Model
     protected $telefono;
     protected $estado;
     // Tabla asociada al modelo
-    protected $table = 'usuario';
+    protected $table = 'equipologistica';
 
     // Campos que se pueden asignar masivamente
     protected $fillable = [
