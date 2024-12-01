@@ -16,9 +16,15 @@ use App\Http\Controllers\Api\BSS_GenerarDevolucionController;
 
 Route::get('/proveedor/listarTodos', [ENT_ProveedorController::class, 'listarTodosProeveedores']);
 
+Route::put('/proveedor/modificarProveedor/{id}', [ENT_ProveedorController::class, 'modificarProveedor']);
+
+
+
 Route::get('/producto/solicitarproducto/{id}', [ENT_ProductoController::class, 'solicitarDatosProducto']);
 
 Route::get('/producto/listarTodos', [ENT_ProductoController::class, 'listarTodosProductos']);
+
+Route::get('/producto/datosTablaReportes', [ENT_ProductoController::class, 'listarReportes']);
 
 Route::get('/producto/datosTablaInventario', [BSS_VerificacionInventarioController::class, 'listarTabla']);
 Route::get('/producto/datosTablaRestock', [BSS_VerificacionInventarioController::class, 'listarTablaRestock']);
@@ -29,10 +35,16 @@ Route::put('/producto/modificarProducto/{id}', [BSS_ModificacionDatosProductosCo
 
 
 
+
 Route::get('/devolucion/listarTodos', [ENT_DevolucionController::class, 'listarTodosDevoluciones']);
 Route::get('/compra/listarTodos', [ENT_CompraController::class, 'listarTodosCompras']);
 
 
+
+Route::get('/equipologistica/listar', [ENT_EquipoLogisticaController::class, 'listarEquipoLogistica']);
+Route::post('/equipologistica/crearUsuario', [ENT_EquipoLogisticaController::class, 'crearEquipoLogistica']);
+Route::put('/equipologistica/modificarUsuario/{id}', [ENT_EquipoLogisticaController::class, 'modificarEquipoLogistica']);
+Route::delete('/equipologistica/eliminarUsuario/{id}', [ENT_EquipoLogisticaController::class, 'eliminarEquipoLogistica']);
 
 Route::post('/equipologistica/login', [ENT_EquipoLogisticaController::class, 'login']);
 

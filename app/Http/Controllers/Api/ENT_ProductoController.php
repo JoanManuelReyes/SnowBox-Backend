@@ -36,4 +36,10 @@ class ENT_ProductoController extends Controller
     {
         return $this->ent_producto->modificarDatosProducto($request, $producto);
     }
+
+    public function listarReportes()
+    {
+        return $this->ent_producto->listarRegistrosyDevoluciones();
+    }    
+
 }
