@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\BSS_SeguimientoComprasController;
 use App\Http\Controllers\Api\BSS_VerificacionInventarioController;
 use App\Http\Controllers\Api\BSS_GenerarCompraProductoController;
 use App\Http\Controllers\Api\BSS_GenerarDevolucionController;
+use App\Http\Controllers\Api\PdfServiceController;
 
 Route::get('/proveedor/listarTodos', [ENT_ProveedorController::class, 'listarTodosProeveedores']);
 
@@ -56,3 +57,8 @@ Route::get('/compra/listarCompras', [BSS_SeguimientoComprasController::class, 'l
 
 Route::post('/compra/generar', [BSS_GenerarCompraProductoController::class, 'registrarCompra']);
 Route::post('/devolucion/generar', [BSS_GenerarDevolucionController::class, 'registrarDevolucion']);
+
+
+Route::post('/pdf/generar', [PdfServiceController::class, 'generarPDF']);
+
+

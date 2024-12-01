@@ -72,6 +72,6 @@ class ENT_Producto {
                 }
             }
         }
-        return response()->json($resultado);
+        return $resultado;
     }
 }
