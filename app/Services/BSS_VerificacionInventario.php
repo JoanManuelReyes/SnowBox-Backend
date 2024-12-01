@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Models\Producto;
 use App\Models\Registro;
-use App\Models\Proveedor;
-use App\Models\Solicitud;
 use App\Http\Controllers\Api\ENT_DevolucionController;
 use App\Http\Controllers\Api\ENT_ProductoController;
 use App\Http\Controllers\Api\ENT_ProveedorController;

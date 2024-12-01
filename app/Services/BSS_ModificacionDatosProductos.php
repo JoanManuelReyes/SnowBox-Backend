@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Producto;
+use App\Http\Controllers\Api\ENT_ProductoController;
 use App\Models\Registro;
 
 class BSS_ModificacionDatosProductos {
@@ -34,12 +35,8 @@ class BSS_ModificacionDatosProductos {
                 'message' => 'Producto no encontrado',
             ];
         }
-
-        $producto->nombre = $request->nombre;
-        $producto->descripcion = $request->descripcion;
-        $producto->stock = $request->entradas-$request->salidas;
-        $producto->proveedor_id= $request->proveedor;
-        $producto->save();
+        
+        app(ENT_ProductoController::class)->modificarDatosProducto($request, $producto);
 
         $registro = Registro::all()->toArray();
         

@@ -18,7 +18,7 @@ class BSS_RevisionProductosRecibidosController extends Controller
 
     public function registrarProducto(Request $request)
     {
-        $resultado = $this->bss_revisionproductosrecibidos->RegistrarProducto($request);
+        $resultado = $this->bss_revisionproductosrecibidos->registrarProducto($request);
 
         return response()->json(
             $resultado, 

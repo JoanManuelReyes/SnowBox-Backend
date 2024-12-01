@@ -21,4 +21,8 @@ class ENT_DevolucionController extends Controller
         return $this->ent_devolucion->listarDevoluciones();
     } 
 
+    public function crearDevolucion(Request $request)
+    {
+        return $this->ent_devolucion->crearDevolucion($request);
+    }
 }

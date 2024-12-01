@@ -20,4 +20,9 @@ class ENT_CompraController extends Controller
     {
         return $this->ent_compra->listarCompras();
     }
+
+    public function crearCompra(Request $request)
+    {
+        return $this->ent_compra->crearCompra($request);
+    }
 }

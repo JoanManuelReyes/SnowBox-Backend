@@ -4,10 +4,8 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Producto;
+use App\Http\Controllers\Api\ENT_ProductoController;
 use App\Models\Registro;
-use App\Models\Proveedor;
-use App\Models\Solicitud;
 
 class BSS_RevisionProductosRecibidos {
     
@@ -27,13 +25,8 @@ class BSS_RevisionProductosRecibidos {
                 'errors' => $validacion->errors(),
             ];
         }
-
-        $producto = Producto::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'stock' => $request->entradas,
-            'proveedor_id' => $request->proveedor,
-        ]);
+        
+        $producto = app(ENT_ProductoController::class)->crearProducto($request);
 
         if (!$producto) {
             return [

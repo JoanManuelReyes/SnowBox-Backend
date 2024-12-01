@@ -16,6 +16,14 @@ class BSS_GenerarDevolucionController extends Controller
         $this->bss_generardevolucion = $bss_generardevolucion;
     }
 
+    public function registrarDevolucion(Request $request)
+    {
+        $resultado = $this->bss_generardevolucion->RegistrarDevolucion($request);
 
+        return response()->json(
+            $resultado, 
+            $resultado['status'] 
+        );
+    }
 
 }

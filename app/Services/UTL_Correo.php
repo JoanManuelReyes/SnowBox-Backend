@@ -2,15 +2,12 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Producto;
-use App\Models\Registro;
-use App\Models\Builder;
-use App\Models\Proveedor;
-use App\Models\Solicitud;
+use Resend\Laravel\Facades\Resend;
 
 class UTL_Correo {
 
-
+    public function enviarCorreo()
+    {   
+        return Resend::emails();
+    }
 }

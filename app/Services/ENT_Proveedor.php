@@ -11,4 +11,9 @@ class ENT_Proveedor {
         $proveedores = Proveedor::all();
         return $proveedores;
     }
+
+    public function solicitarDatosProveedor($id)
+    {   
+        return Proveedor::find($id);
+    }
 }

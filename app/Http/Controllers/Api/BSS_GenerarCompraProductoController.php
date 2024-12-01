@@ -16,6 +16,15 @@ class BSS_GenerarCompraProductoController extends Controller
         $this->bss_generarcompraproducto = $bss_generarcompraproducto;
     }
 
+    public function registrarCompra(Request $request)
+    {
+        $resultado = $this->bss_generarcompraproducto->RegistrarCompra($request);
+
+        return response()->json(
+            $resultado, 
+            $resultado['status'] 
+        );
+    }
 
 
 }

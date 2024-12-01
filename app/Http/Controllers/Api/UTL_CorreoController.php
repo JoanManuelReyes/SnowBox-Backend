@@ -16,6 +16,11 @@ class UTL_CorreoController extends Controller
         $this->utl_correo = $utl_correo;
     }
 
+    public function enviarCorreo()
+    {
+
+        return $this->utl_correo->enviarCorreo();
+    }
 
 
 }

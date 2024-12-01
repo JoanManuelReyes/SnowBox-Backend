@@ -21,4 +21,9 @@ class ENT_ProveedorController extends Controller
         return $this->ent_proveedor->listarProveedores();
     }    
 
+    public function solicitarDatosProveedor($id)
+    {
+        return $this->ent_proveedor->solicitarDatosProveedor($id);
+    }
+
 }

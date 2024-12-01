@@ -35,19 +35,11 @@ class ENT_EquipoLogistica {
         $usuario = EquipoLogistica::where('dni', $request->dni)
                               ->where('contrasenia', $request->contrasenia)
                               ->first();
+        
                               
-        if($usuario->id == '1'){
-            return [
-                'status' => 200,
-                'message' => 'Administrador',
-            ];
-        }
-
-        if($usuario->id == '1'){
-            return [
-                'status' => 200,
-                'message' => 'Usuario',
-            ];
-        }
+        return [
+        'status' => 200,
+        'message' => $usuario->id,
+        ];
     }
 }

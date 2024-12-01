@@ -16,6 +16,17 @@ class BSS_SeguimientoComprasController extends Controller
         $this->bss_seguimientocompras = $bss_seguimientocompras;
     }
 
+    public function listarCompras()
+    {
+        $compras = $this->bss_seguimientocompras->ListarCompras();
+        return response()->json($compras);
+    }
+
+    public function listarTabla()
+    {
+        $solicitudes = $this->bss_seguimientocompras->ListarSolicitudes();
+        return response()->json($solicitudes);
+    }
 
 
 }
