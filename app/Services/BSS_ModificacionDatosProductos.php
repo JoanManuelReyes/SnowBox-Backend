@@ -35,8 +35,6 @@ class BSS_ModificacionDatosProductos {
                 'message' => 'Producto no encontrado',
             ];
         }
-        
-        app(ENT_ProductoController::class)->modificarDatosProducto($request, $id);
 
         $registro = Registro::all()->toArray();
         
@@ -93,6 +91,7 @@ class BSS_ModificacionDatosProductos {
         }
 
         if ($request->entradas > $entradaCantidad) {
+            
             Registro::create([
                 'fecha' => now(),
                 'tipo' => 'Entrada',
@@ -119,6 +118,10 @@ class BSS_ModificacionDatosProductos {
                 'cantidad' => $request->salidas-$salidaCantidad,
                 'producto_id' => $producto->id,
             ]);
+        }
+
+        if ($request->entradas > $entradaCantidad || $request->salidas > $salidaCantidad) {
+            app(ENT_ProductoController::class)->modificarDatosProducto($request, $id);
         }
 
         return [

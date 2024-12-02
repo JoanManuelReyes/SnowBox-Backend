@@ -15,7 +15,7 @@ class BSS_RevisionProductosRecibidos {
             'nombre' => 'required|unique:producto,nombre',
             'proveedor' => 'required|exists:proveedor,id',
             'descripcion' => 'required',
-            'entradas' => 'required',
+            'entradas' => 'required|numeric|min:1',
         ]);
 
         if ($validacion->fails()) {
