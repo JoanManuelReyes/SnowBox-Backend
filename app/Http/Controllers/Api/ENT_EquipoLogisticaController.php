@@ -33,16 +33,31 @@ class ENT_EquipoLogisticaController extends Controller
 
     public function crearEquipoLogistica(Request $request)
     {
-        return $this->ent_equipologistica->CrearUsuario($request);
+        $resultado = $this->ent_equipologistica->CrearUsuario($request);
+
+        return response()->json(
+            $resultado, 
+            $resultado['status'] 
+        );
     }
 
     public function modificarEquipoLogistica(Request $request,$id)
     {
-        return $this->ent_equipologistica->ModificarUsuario($request,$id);
+        $resultado = $this->ent_equipologistica->ModificarUsuario($request,$id);
+
+        return response()->json(
+            $resultado, 
+            $resultado['status'] 
+        );
     }
 
     public function eliminarEquipoLogistica($id)
     {
-        return $this->ent_equipologistica->EliminarUsuario($id);
+        $resultado = $this->ent_equipologistica->EliminarUsuario($id);
+
+        return response()->json(
+            $resultado, 
+            $resultado['status'] 
+        );
     }
 }
