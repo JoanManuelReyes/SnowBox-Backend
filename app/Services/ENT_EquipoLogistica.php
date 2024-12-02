@@ -15,7 +15,6 @@ class ENT_EquipoLogistica {
         $usauriosActivos = $usaurios->filter(function ($usaurio) {
             return $usaurio->estado == 1;
         })->values();
-
         return  $usauriosActivos;
     }
 
