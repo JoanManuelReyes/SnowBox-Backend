@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\BSS_GenerarDevolucionController;
 use App\Http\Controllers\Api\PdfServiceController;
 
 Route::get('/proveedor/listarTodos', [ENT_ProveedorController::class, 'listarTodosProeveedores']);
-
+Route::get('/proveedor/datosProveedor/{id}', [ENT_ProveedorController::class, 'solicitarDatosProveedor']);
 Route::post('/proveedor/registrarProveedor', [ENT_ProveedorController::class, 'crearProveedor']);
 Route::put('/proveedor/modificarProveedor/{id}', [ENT_ProveedorController::class, 'modificarProveedor']);
 
@@ -36,6 +36,7 @@ Route::put('/producto/modificarProducto/{id}', [BSS_ModificacionDatosProductosCo
 
 
 Route::get('/compra/listarTodos', [BSS_SeguimientoComprasController::class, 'listarCompras']);
+Route::get('/compra/listarCompras', [ENT_CompraController::class, 'listarTodosCompras']);
 Route::post('/compra/generar', [BSS_GenerarCompraProductoController::class, 'registrarCompra']);
 Route::put('/compra/actualizarEstado/{id}', [ENT_CompraController::class, 'actualizarEstadoCompra']);
 
