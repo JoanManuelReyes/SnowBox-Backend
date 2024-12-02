@@ -25,7 +25,7 @@ class ENT_EquipoLogistica {
             'id' => 'required|unique:equipologistica,id',
             'nombre' => 'required|unique:equipologistica,nombre_completo',
             'dni' => 'required|unique:equipologistica,nombre_completo',
-            'contrasenia' => 'required',
+            'contrasenia' => 'required|string|max:8',
             'telefono' => 'required',
         ]);
         
@@ -68,7 +68,7 @@ class ENT_EquipoLogistica {
             'id' => 'required|exists:equipologistica,id',
             'nombre' => 'required',
             'dni' => 'required',
-            'contrasenia' => 'required',
+            'contrasenia' => 'required|string|max:8',
             'telefono' => 'required',
         ]);
         
