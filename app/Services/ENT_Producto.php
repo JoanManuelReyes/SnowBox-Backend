@@ -21,12 +21,22 @@ class ENT_Producto {
     }
 
     public function crearProducto(Request $request){
-        return Producto::create([
+        $producto = Producto::create([
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
             'stock' => $request->entradas,
             'proveedor_id' => $request->proveedor,
         ]);
+
+        if(!$producto){
+            $data = [
+                'message' => 'Error al crear el producto',
+                'status' => 500
+            ];
+            return response()->json($data,500);
+        }
+        
+        return $producto;
     }
 
     public function modificarDatosProducto(Request $request, $id){
