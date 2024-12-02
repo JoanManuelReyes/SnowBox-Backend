@@ -13,7 +13,7 @@ class BSS_ModificacionDatosProductos {
     public function ModificarProducto(Request $request,$id) {
         $validacion = Validator::make($request->all(), [
             'id' => 'required|exists:producto,id',
-            'nombre' => 'required',
+            'nombre' => 'required|unique:producto,nombre',
             'proveedor' => 'required|exists:proveedor,id',
             'descripcion' => 'required',
             'entradas' => 'required',
@@ -90,8 +90,11 @@ class BSS_ModificacionDatosProductos {
             ];
         }
 
+        if ($request->entradas > $entradaCantidad || $request->salidas > $salidaCantidad) {
+            app(ENT_ProductoController::class)->modificarDatosProducto($request, $id);
+        }
+
         if ($request->entradas > $entradaCantidad) {
-            
             Registro::create([
                 'fecha' => now(),
                 'tipo' => 'Entrada',
@@ -118,10 +121,6 @@ class BSS_ModificacionDatosProductos {
                 'cantidad' => $request->salidas-$salidaCantidad,
                 'producto_id' => $producto->id,
             ]);
-        }
-
-        if ($request->entradas > $entradaCantidad || $request->salidas > $salidaCantidad) {
-            app(ENT_ProductoController::class)->modificarDatosProducto($request, $id);
         }
 
         return [

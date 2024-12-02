@@ -25,4 +25,9 @@ class ENT_DevolucionController extends Controller
     {
         return $this->ent_devolucion->crearDevolucion($request);
     }
+
+    public function actualizarEstadoDevolucion(Request $request, $id)
+    {
+        return $this->ent_devolucion->crearDevolucion($request, $id);
+    }
 }

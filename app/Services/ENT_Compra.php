@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Compra;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ENT_Compra {
 
@@ -26,5 +27,33 @@ class ENT_Compra {
             'fecha' => now(),
             'estado' => 'En espera',
         ]);
+    }
+
+    public function actualizarEstadoCompra(Request $request, $id){
+        $validacion = Validator::make($request->all(), [
+            'estado' => 'required',
+        ]);
+
+        if ($validacion->fails()) {
+            return [
+                'status' => 400,
+                'message' => 'Error en validar',
+                'errors' => $validacion->errors(),
+            ];
+        }
+
+        $compra = Compra::find($id);
+        if (!$compra) {
+            return [
+                'status' => 404,
+                'message' => 'Compra no encontrada',
+            ];
+        }
+        $compra->estado = $request->estado;
+        $compra->save();
+        return [
+            'status' => 200,
+            'message' => 'Estado de compra actualizado correctamente',
+        ];
     }
 }

@@ -62,7 +62,7 @@ class ENT_Proveedor {
     {   
         $validacion = Validator::make($request->all(), [
             'id' => 'required|exists:proveedor,id',
-            'nombre' => 'required',
+            'nombre' => 'required|unique:proveedor,nombre',
             'ruc' => 'required|digits:11',
             'telefono' => 'required|digits:9',
             'correo' => 'required|email',
@@ -90,13 +90,6 @@ class ENT_Proveedor {
         $proveedor->telefono = $request->telefono;
         $proveedor->correo = $request->correo;
         $proveedor->save();
-
-        if (!$proveedor) {
-            return [
-                'status' => 500,
-                'message' => 'Error al modificar',
-            ];
-        }
 
         return [
             'status' => 200,

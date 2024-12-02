@@ -17,8 +17,8 @@ use App\Http\Controllers\Api\PdfServiceController;
 
 Route::get('/proveedor/listarTodos', [ENT_ProveedorController::class, 'listarTodosProeveedores']);
 
+Route::post('/proveedor/registrarProveedor', [ENT_ProveedorController::class, 'crearProveedor']);
 Route::put('/proveedor/modificarProveedor/{id}', [ENT_ProveedorController::class, 'modificarProveedor']);
-
 
 
 Route::get('/producto/solicitarproducto/{id}', [ENT_ProductoController::class, 'solicitarDatosProducto']);
@@ -35,11 +35,14 @@ Route::post('/producto/registrarProducto', [BSS_RevisionProductosRecibidosContro
 Route::put('/producto/modificarProducto/{id}', [BSS_ModificacionDatosProductosController::class, 'modificarProducto']);
 
 
+Route::get('/compra/listarTodos', [BSS_SeguimientoComprasController::class, 'listarCompras']);
+Route::post('/compra/generar', [BSS_GenerarCompraProductoController::class, 'registrarCompra']);
+Route::put('/compra/actualizarEstado/{id}', [ENT_CompraController::class, 'actualizarEstadoCompra']);
 
 
 Route::get('/devolucion/listarTodos', [ENT_DevolucionController::class, 'listarTodosDevoluciones']);
-Route::get('/compra/listarTodos', [ENT_CompraController::class, 'listarTodosCompras']);
-
+Route::post('/devolucion/generar', [BSS_GenerarDevolucionController::class, 'registrarDevolucion']);
+Route::put('/devolucion/actualizarEstado/{id}', [ENT_DevolucionController::class, 'actualizarEstadoDevolucion']);
 
 
 Route::get('/equipologistica/listar', [ENT_EquipoLogisticaController::class, 'listarEquipoLogistica']);
@@ -47,16 +50,11 @@ Route::post('/equipologistica/crearUsuario', [ENT_EquipoLogisticaController::cla
 Route::put('/equipologistica/modificarUsuario/{id}', [ENT_EquipoLogisticaController::class, 'modificarEquipoLogistica']);
 Route::delete('/equipologistica/eliminarUsuario/{id}', [ENT_EquipoLogisticaController::class, 'eliminarEquipoLogistica']);
 
+
 Route::post('/equipologistica/login', [ENT_EquipoLogisticaController::class, 'login']);
 
 
-
 Route::get('/solicitud/listarSolicitudesModulo', [BSS_SeguimientoComprasController::class, 'listarTabla']);
-
-Route::get('/compra/listarCompras', [BSS_SeguimientoComprasController::class, 'listarCompras']);
-
-Route::post('/compra/generar', [BSS_GenerarCompraProductoController::class, 'registrarCompra']);
-Route::post('/devolucion/generar', [BSS_GenerarDevolucionController::class, 'registrarDevolucion']);
 
 
 Route::post('/pdf/generar', [PdfServiceController::class, 'generarPDF']);

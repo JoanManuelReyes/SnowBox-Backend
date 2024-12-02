@@ -25,4 +25,9 @@ class ENT_CompraController extends Controller
     {
         return $this->ent_compra->crearCompra($request);
     }
+
+    public function actualizarEstadoCompra(Request $request, $id)
+    {
+        return $this->ent_compra->actualizarEstadoCompra($request, $id);
+    }
 }

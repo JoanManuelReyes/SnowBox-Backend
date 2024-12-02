@@ -87,7 +87,7 @@ class ENT_EquipoLogistica {
 
         if (!$usuario) {
             return [
-                'status' => 500,
+                'status' => 404,
                 'message' => 'Error al encontrar al usuario',
             ];
         }
@@ -110,7 +110,7 @@ class ENT_EquipoLogistica {
 
         if (!$usuario) {
             return [
-                'status' => 500,
+                'status' => 404,
                 'message' => 'Error al encontrar al usuario',
             ];
         }
@@ -146,7 +146,6 @@ class ENT_EquipoLogistica {
                               ->where('contrasenia', $request->contrasenia)
                               ->first();
         
-                              
         return [
         'status' => 200,
         'message' => $usuario->id,
