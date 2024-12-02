@@ -24,9 +24,9 @@ class ENT_EquipoLogistica {
         $validacion = Validator::make($request->all(), [
             'id' => 'required|unique:equipologistica,id',
             'nombre' => 'required|unique:equipologistica,nombre_completo',
-            'dni' => 'required|unique:equipologistica,nombre_completo',
+            'dni' => 'required|unique:equipologistica,dni|digits:8',
             'contrasenia' => 'required|string|max:8',
-            'telefono' => 'required',
+            'telefono' => 'required|digits:9',
         ]);
         
         if ($validacion->fails()) {
@@ -67,9 +67,9 @@ class ENT_EquipoLogistica {
         $validacion = Validator::make($request->all(), [
             'id' => 'required|exists:equipologistica,id',
             'nombre' => 'required',
-            'dni' => 'required',
+            'dni' => 'required|digits:8',
             'contrasenia' => 'required|string|max:8',
-            'telefono' => 'required',
+            'telefono' => 'required|digits:9',
         ]);
         
         if ($validacion->fails()) {
