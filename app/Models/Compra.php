@@ -8,4 +8,6 @@ class Compra extends Solicitud
         parent::__construct();
         $this->setTipo("Compra");
     }
+
+    public $timestamps = false;
 }

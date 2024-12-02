@@ -8,4 +8,6 @@ class Entrada extends Registro
         parent::__construct();
         $this->setTipo("Entrada");
     }
+
+    public $timestamps = false;
 }

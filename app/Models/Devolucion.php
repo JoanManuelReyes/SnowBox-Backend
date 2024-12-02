@@ -8,4 +8,6 @@ class Devolucion extends Solicitud
         parent::__construct();
         $this->setTipo("Devolución");
     }
+
+    public $timestamps = false;
 }

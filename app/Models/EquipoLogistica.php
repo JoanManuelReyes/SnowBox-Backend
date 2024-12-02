@@ -24,6 +24,8 @@ class EquipoLogistica extends Model
         'estado'
     ];
 
+    public $timestamps = false;
+
     public function getId()
     {
         return $this->id;

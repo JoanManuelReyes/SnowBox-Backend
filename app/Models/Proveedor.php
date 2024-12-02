@@ -23,6 +23,8 @@ class Proveedor extends Model
         'correo'
     ];
 
+    public $timestamps = false;
+    
     public function getId()
     {
         return $this->id;

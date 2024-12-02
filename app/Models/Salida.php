@@ -8,4 +8,6 @@ class Salida extends Registro
         parent::__construct();
         $this->setTipo("Salida");
     }
+
+    public $timestamps = false;
 }
