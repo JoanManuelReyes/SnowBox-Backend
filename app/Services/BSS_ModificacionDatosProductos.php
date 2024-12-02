@@ -36,7 +36,7 @@ class BSS_ModificacionDatosProductos {
             ];
         }
         
-        app(ENT_ProductoController::class)->modificarDatosProducto($request, $producto);
+        app(ENT_ProductoController::class)->modificarDatosProducto($request, $id);
 
         $registro = Registro::all()->toArray();
         
@@ -120,7 +120,7 @@ class BSS_ModificacionDatosProductos {
                 'producto_id' => $producto->id,
             ]);
         }
-        
+
         return [
             'status' => 200,
             'message' => 'Producto modificado correctamente',

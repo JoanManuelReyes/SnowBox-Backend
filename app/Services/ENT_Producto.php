@@ -29,12 +29,17 @@ class ENT_Producto {
         ]);
     }
 
-    public function modificarDatosProducto(Request $request, Producto $producto){
-        return $producto->nombre = $request->nombre;
+    public function modificarDatosProducto(Request $request, $id){
+        $producto = Producto::find($id);
+        $producto->nombre = $request->nombre;
         $producto->descripcion = $request->descripcion;
         $producto->stock = $request->entradas-$request->salidas;
         $producto->proveedor_id= $request->proveedor;
         $producto->save();
+        return [
+            'status' => 200,
+            'message' => 'Producto modificado correctamente desde Entidad',
+        ];
     }
 
     public function listarRegistrosyDevoluciones(){

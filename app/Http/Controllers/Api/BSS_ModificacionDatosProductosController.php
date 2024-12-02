@@ -20,10 +20,7 @@ class BSS_ModificacionDatosProductosController extends Controller
     {
         $resultado = $this->bss_modificaciondatosproductos->ModificarProducto($request,$id);
 
-        return response()->json(
-            $resultado, 
-            $resultado['status'] 
-        );
+        return $this->bss_modificaciondatosproductos->ModificarProducto($request,$id);
     }
 
 

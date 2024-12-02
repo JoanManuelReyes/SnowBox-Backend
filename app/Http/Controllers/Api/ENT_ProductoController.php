@@ -32,9 +32,9 @@ class ENT_ProductoController extends Controller
         return $this->ent_producto->crearProducto($request);
     }
 
-    public function modificarDatosProducto(Request $request, Producto $producto)
+    public function modificarDatosProducto(Request $request, $id)
     {
-        return $this->ent_producto->modificarDatosProducto($request, $producto);
+        return $this->ent_producto->modificarDatosProducto($request, $id);
     }
 
     public function listarReportes()
