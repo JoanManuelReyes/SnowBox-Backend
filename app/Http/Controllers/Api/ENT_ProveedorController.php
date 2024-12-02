@@ -27,8 +27,12 @@ class ENT_ProveedorController extends Controller
     }
 
     public function crearProveedor(Request $request)
-    {
-        return $this->ent_proveedor->crearProveedor($request);
+    {   
+        $resultado = $this->ent_proveedor->crearProveedor($request);
+        return response()->json(
+            $resultado, 
+            $resultado['status'] 
+        );
     }
 
     public function modificarProveedor(Request $request,$id)
