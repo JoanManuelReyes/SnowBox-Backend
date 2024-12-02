@@ -11,6 +11,10 @@ class PdfService {
         $producto=isset($request->producto) ? $request->producto : 'Todos';
         $dateRange=$request->dateRange ? $request->dateRange : 'Sin filtro';
         
+        if($producto=='Producto' || $producto==0){
+            $producto='Todos';
+        }
+
         $startDate = '';
         $endDate = '';
 
