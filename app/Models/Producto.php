@@ -174,12 +174,6 @@ class Producto extends Model
         return array_values($resultado);
     }
 
-    // Método toString para mostrar el objeto Producto
-    public function toString()
-    {
-        return "Producto: {$this->nombre} - {$this->descripcion}, Categoría: {$this->categoria}, Subcategoría: {$this->subcategoria}, Stock: {$this->stock}";
-    }
-
     // Builder estático para construir el objeto
     public static function builder()
     {
