@@ -13,7 +13,7 @@ class BSS_ModificacionDatosProductos {
     public function ModificarProducto(Request $request,$id) {
         $validacion = Validator::make($request->all(), [
             'id' => 'required|exists:producto,id',
-            'nombre' => 'required|unique:producto,nombre',
+            'nombre' => 'required',
             'proveedor' => 'required|exists:proveedor,id',
             'descripcion' => 'required',
             'entradas' => 'required',

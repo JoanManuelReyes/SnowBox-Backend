@@ -62,7 +62,7 @@ class ENT_Proveedor {
     {   
         $validacion = Validator::make($request->all(), [
             'id' => 'required|exists:proveedor,id',
-            'nombre' => 'required|unique:proveedor,nombre',
+            'nombre' => 'required',
             'ruc' => 'required|digits:11',
             'telefono' => 'required|digits:9',
             'correo' => 'required|email',
